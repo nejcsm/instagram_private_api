@@ -111,12 +111,7 @@ class ClientCompatPatch(object):
                       or media.get('edge_media_to_comment', {})).get('count', 0),
             'data': []
         }
-        # Try to preserve location even if there's no lat/lng
-        if 'location' not in media or not media['location']:
-            media['location'] = None
-        elif media.get('location', {}).get('lat') and media.get('location', {}).get('lng'):
-            media['location']['latitude'] = media['location']['lat']
-            media['location']['longitude'] = media['location']['lng']
+
         media['id'] = '{0!s}_{1!s}'.format(media['id'], media['owner']['id'])
         media['created_time'] = str(
             media.get('date', '') or media.get('taken_at_timestamp', ''))
