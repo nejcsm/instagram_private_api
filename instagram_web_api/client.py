@@ -16,6 +16,7 @@ import warnings
 from functools import wraps
 import string
 import random
+import datetime 
 from socket import timeout, error as SocketError
 from ssl import SSLError
 from .compat import (
@@ -382,7 +383,10 @@ class Client(object):
         """Login to the web site."""
         if not self.username or not self.password:
             raise ClientError('username/password is blank')
-        params = {'username': self.username, 'password': self.password, 'queryParams': '{}'}
+
+        enc_password = '#PWD_INSTAGRAM_BROWSER:0:{}:{}'.format(int(datetime.datetime.now().timestamp()), self.password)
+
+        params = {'username': self.username, 'enc_password': enc_password, 'queryParams': '{}'}
         self._init_rollout_hash()
         login_res = self._make_request('https://www.instagram.com/accounts/login/ajax/', params=params)
         if not login_res.get('status', '') == 'ok' or not login_res.get('authenticated'):
