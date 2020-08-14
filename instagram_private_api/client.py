@@ -122,6 +122,8 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
         self.application_id = (
             kwargs.pop('application_id', None) or user_settings.get('application_id') or
             self.APPLICATION_ID)
+        self.phone_id = kwargs.pop('phone_id', None) or user_settings.get('phone_id') or self.generate_uuid(return_hex=False, seed=self.device_id)
+        print(self.phone_id)
 
         # to maintain backward compat for user_agent kwarg
         custom_ua = kwargs.pop('user_agent', '') or user_settings.get('user_agent')
@@ -358,11 +360,6 @@ class Client(AccountsEndpointsMixin, DiscoverEndpointsMixin, FeedEndpointsMixin,
     def authenticated_user_name(self):
         """The current authenticated user name"""
         return self.get_cookie_value('ds_user')
-
-    @property
-    def phone_id(self):
-        """Current phone ID. For use in certain functions."""
-        return self.generate_uuid(return_hex=False, seed=self.device_id)
 
     @property
     def timezone_offset(self):
